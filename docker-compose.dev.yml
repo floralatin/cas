@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+
+ api-server:
+  build:
+   context: .
+  ports:
+   - 8000:3000
+   - 9229:9229
+  environment:
+   - SERVER_PORT=3000
+   - CONNECTIONSTRING=mongodb://mongo:27017/cas
+  volumes:
+   - ./:/app
+   - /app/node_modules
+  command: npm run debug
+  depends_on:
+    - mongo
+
+ mongo:
+  image: mongo:latest
+  ports:
+   - 27017:27017
+  volumes:
+   - mongodb:/data/db
+   - mongodb_config:/data/configdb
+volumes:
+ mongodb:
+ mongodb_config:
