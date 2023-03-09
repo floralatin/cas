@@ -1,0 +1,23 @@
+name: Release and tag
+on:
+  push:
+    branches: [main]
+  
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    env:
+      NODE_ENV: testing
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Prepare local repository
+        run: git fetch --prune --unshallow --tags -f
+      - name: semver-releaser
+        uses: heyvito/semver-releaser@v0.0.8
+        with:
+          github-token: ${{ secrets.GITHUB_DEV_TOKEN }}
